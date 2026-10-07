@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قطع غيار الجزائر - DzParts</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00875a;
+      --primary-dark: #006644;
+      --accent: #e63946;
+      --bg-light: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg-light); color: var(--text); direction: rtl; padding-bottom: 40px; }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .brand-logo { font-size: 1.6rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+    nav { display: flex; justify-content: center; gap: 10px; background: white; padding: 12px; border-bottom: 1px solid var(--border); }
+    .nav-btn {
+      padding: 10px 20px; border: none; background: #e2e8f0; color: var(--text);
+      border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s;
+    }
+    .nav-btn.active { background: var(--primary); color: white; }
+
+    /* أزرار التبويب المدرجة (للبائع والمشتري) */
+    .role-tabs {
+      display: flex; justify-content: center; gap: 10px; margin: 15px 0 20px 0;
+    }
+    .role-tab-btn {
+      flex: 1; padding: 10px 15px; border: 1.5px solid var(--primary); background-color: #ffffff;
+      color: var(--primary); font-weight: bold; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .role-tab-btn.active { background-color: var(--primary); color: #ffffff; }
+
+    .container { max-width: 950px; margin: 20px auto; padding: 0 15px; }
+    .card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 15px; flex: 1; min-width: 220px; }
+    .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+
+    label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 0.9rem; color: var(--text-muted); }
+    select, input, textarea {
+      width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.95rem; outline: none; background: white; transition: 0.2s;
+    }
+    select:focus, input:focus, textarea:focus { border-color: var(--primary); }
+
+    .btn-submit {
+      width: 100%; background: var(--primary); color: white; border: none; padding: 14px;
+      border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s;
+    }
+    .btn-submit:hover { background: var(--primary-dark); }
+
+    .request-card { background: var(--surface); border-radius: var(--radius); padding: 18px; margin-bottom: 15px; border-right: 5px solid var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .request-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 12px; }
+    .car-title { font-size: 1.1rem; font-weight: bold; color: var(--primary-dark); }
+    
+    .badge-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .badge { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+    .badge-status { background: #fef3c7; color: #92400e; }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 15px; font-size: 0.95rem; }
+    .info-item { background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #edf2f7; }
+
+    /* ترتيب وأزرار العمليات */
+    .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+    @media (min-width: 600px) { .actions { flex-direction: row; } }
+    
+    .btn-action {
+      flex: 1; padding: 12px; border-radius: 8px; text-decoration: none; text-align: center;
+      font-weight: bold; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; color: white; border: none; cursor: pointer; transition: 0.2s;
+    }
+    .btn-phone { background: #10b981; }
+    .btn-phone:hover { background: #059669; }
+    .btn-whatsapp { background: #25d366; }
+    .btn-whatsapp:hover { background: #1da851; }
+    .btn-seller { background: #0284c7; }
+    .btn-seller:hover { background: #0369a1; }
+    .btn-delete { background: #ef4444; }
+    .btn-delete:hover { background: #dc2626; }
+
+    /* ردود البائعين */
+    .offers-container { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border); }
+    .offer-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .offer-info { font-size: 0.9rem; }
+    .seller-form { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; margin-top: 12px; }
+
+    .hidden { display: none; }
+    .loading { text-align: center; padding: 30px; color: var(--text-muted); font-weight: bold; }
+  </style>
+
+  <!-- مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+  <header>
+    <div class="brand-logo"><i class="fa-solid fa-car-burst"></i> قطع غيار الجزائر (DzParts)</div>
+  </header>
+
+  <nav>
+    <button class="nav-btn active" onclick="switchTab('search')"><i class="fa-solid fa-list"></i> تصفح الطلبات</button>
+    <button class="nav-btn" onclick="switchTab('add')"><i class="fa-solid fa-plus-circle"></i> نشر طلب جديد</button>
+  </nav>
+
+  <div class="container">
+
+    <!-- قسم تصفح الطلبات -->
+    <div id="tab-search" class="card">
+      
+      <!-- أزرار التبويب لتحديد نوع العرض (للبائع / للمشتري) -->
+      <div class="role-tabs">
+        <button id="tabRoleAll" class="role-tab-btn active" onclick="switchRoleTab('all')">
+          <i class="fa-solid fa-store"></i> كل الطلبات (للبائعين)
+        </button>
+        <button id="tabRoleMy" class="role-tab-btn" onclick="switchRoleTab('my')">
+          <i class="fa-solid fa-user"></i> طلباتي فقط
+        </button>
+      </div>
+
+      <h3 style="margin-bottom: 15px; color: var(--primary-dark);"><i class="fa-solid fa-filter"></i> البحث وتصفية الطلبات</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>الماركة</label>
+          <select id="filter-brand" onchange="updateModels('filter-brand', 'filter-model'); filterRequests();">
+            <option value="">جميع الماركات</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>الموديل</label>
+          <select id="filter-model" onchange="filterRequests()">
+            <option value="">اختر الماركة أولاً</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>المحرك</label>
+          <select id="filter-engine" onchange="filterRequests()">
+            <option value="">جميع المحركات</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>فئة القطعة</label>
+          <select id="filter-category" onchange="updateParts('filter-category', 'filter-part'); filterRequests();">
+            <option value="">جميع الفئات</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>اسم القطعة</label>
+          <select id="filter-part" onchange="filterRequests()">
+            <option value="">اختر الفئة أولاً</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>الحالة المطلوبة</label>
+          <select id="filter-condition" onchange="filterRequests()">
+            <option value="">جميع الحالات</option>
+            <option value="جديد (Neuf)">جديد (Neuf)</option>
+            <option value="مستعمل (Occasion)">مستعمل (Occasion)</option>
+            <option value="لكاس (Casse)">لكاس (Casse)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>الولاية</label>
+          <select id="filter-wilaya" onchange="updateCommunes('filter-wilaya', 'filter-commune'); filterRequests();">
+            <option value="">جميع الولايات (58 ولاية)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>البلدية</label>
+          <select id="filter-commune" onchange="filterRequests()">
+            <option value="">اختر الولاية أولاً</option>
+          </select>
+        </div>
+      </div>
+
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);">
+
+      <!-- قائمة الطلبات المباشرة -->
+      <div id="requests-container">
+        <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> جاري الاتصال بقاعدة البيانات والجلب...</div>
+      </div>
+    </div>
+
+    <!-- قسم نشر طلب جديد -->
+    <div id="tab-add" class="card hidden">
+      <h3 style="margin-bottom: 15px; color: var(--primary-dark);"><i class="fa-solid fa-pen-to-square"></i> إضافة طلب قطعة غيار جديدة</h3>
+      <form id="add-request-form" onsubmit="handleFormSubmit(event)">
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>الماركة</label>
+            <select id="add-brand" required onchange="updateModels('add-brand', 'add-model')">
+              <option value="">اختر الماركة</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>الموديل</label>
+            <select id="add-model" required>
+              <option value="">اختر الماركة أولاً</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>سنة الصنع</label>
+            <select id="add-year" required>
+              <option value="">اختر السنة</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>نوع المحرك</label>
+            <select id="add-engine" required>
+              <option value="">اختر المحرك</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>فئة القطعة (Catégorie)</label>
+            <select id="add-category" required onchange="updateParts('add-category', 'add-part')">
+              <option value="">اختر الفئة</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>اسم القطعة (Nom de pièce)</label>
+            <select id="add-part" required>
+              <option value="">اختر الفئة أولاً</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>حالة القطعة (État)</label>
+            <select id="add-condition" required>
+              <option value="">اختر الحالة</option>
+              <option value="جديد (Neuf)">جديد (Neuf)</option>
+              <option value="مستعمل (Occasion)">مستعمل (Occasion)</option>
+              <option value="لكاس (Casse)">لكاس (Casse)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>الولاية</label>
+            <select id="add-wilaya" required onchange="updateCommunes('add-wilaya', 'add-commune')">
+              <option value="">اختر الولاية (58 ولاية)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>البلدية</label>
+            <select id="add-commune" required>
+              <option value="">اختر الولاية أولاً</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>رقم الهاتف للتواصل</label>
+            <input type="tel" id="add-phone" placeholder="05 / 06 / 07" required pattern="0[567][0-9]{8}">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn-submit">نشر الطلب سحابياً</button>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. مفاتيح إعدادات مشروع Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBHQufh5e-zHeF22Ejwdn73Q3BGovC0SZs",
+      authDomain: "dzpart-b54e7.firebaseapp.com",
+      databaseURL: "https://dzpart-b54e7-default-rtdb.firebaseio.com",
+      projectId: "dzpart-b54e7",
+      storageBucket: "dzpart-b54e7.firebasestorage.app",
+      messagingSenderId: "915739554886",
+      appId: "1:915739554886:web:28c0e17b5cd62220540647",
+      measurementId: "G-GTGRSSHS6J"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const requestsRef = database.ref('requests');
+
+    let currentRoleTab = 'all'; // 'all' للبائعين، 'my' للمشتري
+
+    // --- البيانات الأساسية ---
+    const wilayasList = [
+      "01 - أدرار", "02 - الشلف", "03 - الأغواط", "04 - أم البواقي", "05 - باتنة",
+      "06 - بجاية", "07 - بسكرة", "08 - بشار", "09 - البليدة", "10 - البويرة",
+      "11 - تمنراست", "12 - تبسة", "13 - تلمسان", "14 - تيارت", "15 - تيزي وزو",
+      "16 - الجزائر", "17 - الجلفة", "18 - جيجل", "19 - سطيف", "20 - السعيدة",
+      "21 - سكيكدة", "22 - سيدي بلعباس", "23 - عنابة", "24 - قالمة", "25 - قسنطينة",
+      "26 - المدية", "27 - مستغانم", "28 - المسيلة", "29 - معسكر", "30 - ورقلة",
+      "31 - وهران", "32 - البيض", "33 - إليزي", "34 - برج بوعريريج", "35 - بومرداس",
+      "36 - الطارف", "37 - تندوف", "38 - تسمسيلت", "39 - الوادي", "40 - خنشلة",
+      "41 - سوق أهراس", "42 - تيبازة", "43 - ميلة", "44 - عين الدفلى", "45 - النعامة",
+      "46 - عين تموشنت", "47 - غرداية", "48 - غليزان", "49 - تيميمون", "50 - برج باجي مختار",
+      "51 - أولاد جلال", "52 - بني عباس", "53 - إن صالح", "54 - إن قزام", "55 - تقرت",
+      "56 - المغير", "57 - المنيعة", "58 - أولاد جلال"
+    ];
+
+    const communesData = {
+      "16 - الجزائر": ["باب الزوار", "الرويبة", "الشراقة", "القبة", "بئر خادم", "درارية", "زرالدة", "حسين داي", "عين البنيان", "الرغية", "الحراش", "بئر توتة", "بوزريعة"],
+      "17 - الجلفة": ["الجلفة", "عين وسارة", "حاسي بحبح", "مسعد", "الشارف", "دار الشيوخ", "الإدريسية", "البيرين"],
+      "19 - سطيف": ["سطيف", "العلمة", "عين أرنات", "عين ولمان", "بوقاعة", "عين الكبيرة", "جميلة"],
+      "31 - وهران": ["وهران", "بئر الجير", "السانية", "أرزيو", "عين الترك", "قديل", "وادي تليلات"],
+      "25 - قسنطينة": ["قسنطينة", "الخروب", "علي منجلي", "حمة بوزيان", "زيغود يوسف", "عين سمارة"],
+      "09 - البليدة": ["البليدة", "بوفاريك", "العفرون", "أولاد يعيش", "موزاية", "الصومعة"],
+      "06 - بجاية": ["بجاية", "أقبو", "القصر", "أميزور", "خراطة", "تيشي"],
+      "15 - تيزي وزو": ["تيزي وزو", "أزازقة", "ذراع بن خدة", "بوغني", "تيزي غنيف", "عين الحمام"],
+      "23 - عنابة": ["عنابة", "البوني", "الحجار", "برحال", "سرايدي"],
+      "14 - تيارت": ["تيارت", "سوقر", "فرندة", "مهدية", "قصر الشلالة"]
+    };
+
+    const modelsData = {
+      'Renault': ['Symbol', 'Clio 4', 'Clio 3', 'Clio Campus', 'Clio 2 / Megane 1', 'Megane 3', 'Megane 4', 'Megane 2', 'Kangoo', 'Master', 'Fluence', 'Express', 'Super 5', 'Koleos', 'Kadjar', 'Trafic', 'Captur'],
+      'Dacia': ['Logan', 'Sandero Stepway', 'Sandero Classic', 'Duster', 'Dokker', 'Lodgy', 'Spring'],
+      'Peugeot': ['208', '301', '207', '308', '206 / 206+', '407', '508', '3008', '2008', '5008', 'Partner', 'Expert', 'Boxer', 'Rifter'],
+      'Volkswagen': ['Golf 7', 'Golf 6', 'Golf 8', 'Golf 5', 'Golf 4', 'Polo', 'Caddy', 'Passat', 'Tiguan', 'Amarok', 'Touareg', 'T-Roc', 'Transporter / T6'],
+      'Hyundai': ['Accent RB', 'Accent HC / Accent', 'i10', 'Grand i10', 'Atos', 'Atos Prime', 'Tucson', 'Elantra', 'Santa Fe', 'Creta', 'i20', 'i30', 'H1 / H100', 'Sonata'],
+      'Kia': ['Picanto', 'Rio', 'Sportage', 'Sorento', 'K2500', 'Cerato', 'Pegas', 'Seltos', 'Soul'],
+      'Seat': ['Ibiza', 'Leon', 'Arona', 'Ateca', 'Toledo'],
+      'Toyota': ['Hilux', 'Yaris', 'Corolla', 'Land Cruiser / Prado', 'RAV4', 'Fortuner', 'Hiace'],
+      'Suzuki': ['Maruti 800', 'Alto', 'Swift', 'Celerio', 'Jimny', 'Baleno', 'Dzire', 'S-Cross', 'Grand Vitara'],
+      'Chevrolet': ['Sail', 'Spark', 'Aveo', 'Optra', 'Captiva', 'Cruze'],
+      'Fiat': ['500', '500X', 'Tipo', 'Doblo', 'Ducato', 'Panda', 'Fiorino', 'Grande Punto', 'Scudo'],
+      'Chery': ['Tiggo 2 Pro', 'Tiggo 4 Pro', 'Tiggo 7 Pro', 'Tiggo 8 Pro', 'Arrizo 5', 'QQ'],
+      'Geely': ['GX3 Pro', 'Coolray', 'Emgrand', 'Starray', 'Azkarra'],
+      'DFSK': ['Glory 580', 'Glory 500', 'K01 / Pick-up', 'C35 / C31'],
+      'Skoda': ['Fabia', 'Octavia', 'Rapid', 'Kamiq', 'Kodiaq', 'Superb'],
+      'Nissan': ['Sunny', 'Navara', 'Micra', 'Qashqai', 'Patrol', 'Juke', 'X-Trail'],
+      'Citroen': ['C-Elysée', 'C3', 'Berlingo', 'Jumper', 'C4', 'C5 Aircross'],
+      'Ford': ['Fiesta', 'Focus', 'Ranger', 'Kuga', 'Transit'],
+      'Mercedes-Benz': ['Classe A', 'Classe C', 'Classe E', 'Sprinter', 'Vito', 'G-Class'],
+      'BMW': ['Série 1', 'Série 3', 'Série 5', 'X1', 'X3', 'X5', 'X6'],
+      'Audi': ['A1', 'A3', 'A4', 'A6', 'Q3', 'Q5', 'Q7'],
+      'Mitsubishi': ['L200', 'Pajero', 'Lancer', 'Outlander'],
+      'Isuzu': ['D-Max', 'N-Series (NKR/NMR)'],
+      'JMC / JAC': ['JAC J7', 'JAC S3', 'JAC Boarding', 'JMC Carrying', 'JMC Vexus']
+    };
+
+    const enginesList = [
+      "1.5 dCi (Renault/Dacia)", "1.6 HDI (Peugeot/Citroen)", "1.2 Ess (1.2 16V / MPI)",
+      "1.4 MPI / 1.4 Ess", "1.6 VTi / 1.6 16V", "2.0 TDI (Volkswagen/Seat/Skoda)",
+      "1.9 D / 1.9 TDI", "1.0 Ess / 1.1 Ess (Picanto/Maruti/Atos)", "2.5 D4D / TD (Toyota Hilux)",
+      "2.0 CRDi / 1.6 CRDi (Hyundai/Kia)", "1.5 TGDI / 1.5 T-GDI (Geely/Chery)",
+      "1.2 PureTech / TCe", "2.2 HDi / TDCi / D-Max 2.5/3.0", "2.0 DCI / 2.0 HDI", "1.8 Ess / 2.0 Ess"
+    ];
+
+    const categoriesData = {
+      "ميكانيك (Mécanique)": [
+        "Kit d'embrayage (دبرياج)", "Injecteur / Injecteurs (بخاخات)", "Turbo (توربو)",
+        "Boite de vitesse (علبة السرعة)", "Moteur Complet (محرك كامل)", "Pompe à injection (مضخة الضغط)",
+        "Radiateur eau / clim (رادياتور)", "Crémaillère (كريمايار / توجيه)", "Pompe à eau / Kit distribution (مضخة ماء وحزام)",
+        "Support moteur (سوبور موتور)", "Amortisseur / Amortisseurs (أمورتيسور)"
+      ],
+      "كهرباء وشبكة (Électricité)": [
+        "Alternateur (دينامو)", "Démarreur (ديمارور)", "Calculateur Moteur (كمبيوتر / الميموار)",
+        "Optique / Phare (مصباح أمامي)", "Feu Arrière (مصباح خلفي)", "Capteur (حساسات)",
+        "Boite à fusibles / BSI (علبة الفيوزات)", "Commodo (كوموندو سويتش)", "Batterie (بطارية)", "Lève vitre (مكينة زجاج)"
+      ],
+      "هيكل وهيكل خارجي (Tôle & Carrosserie)": [
+        "Para-choc Avant (مصد أمامي)", "Para-choc Arrière (مصد خلفي)", "Capot (غطاء المحرك)",
+        "Ail (رفرف / جناح)", "Portière Avant / Arrière (باب)", "Malle / Malle arrière (صندوق خلفي)",
+        "Rétroviseur (مرآة)", "Calandre (شبك أمامي)", "Pare-boue (باربود)", "Squelette / Renfort (رونفور)"
+      ],
+      "إكسسوارات وديكور (Accessoires & Intérieur)": [
+        "Volant (مقود)", "Tableau de bord (طابلودبور)", "Sièges / Salons (مقاعد)",
+        "Poignée de porte (مقبض الباب)", "Périphériques / Tapisserie (ديكور داخلي)", "Levier de vitesse (مقبض السرعة)", "Écran Android / Radio (شاشة وراديو)"
+      ],
+      "زجاج ومرايا (Vitrage)": [
+        "Parbrise Avant (زجاج أمامي)", "Vitre Portière (زجاج جانبي)", "Lunette Arrière (زجاج خلفي)", "Toit Panoramique (سقف بانورامي)"
+      ],
+      "عجلات وفرامل (Freinage & Roues)": [
+        "Jantes (جانت / عجلات ألومنيوم)", "Pneumatique (عجلات مطاطية)", "Plaquettes de frein (بلاكيت دوفرا)", "Disque de frein (ديسك دوفرا)", "Etrier de frein (إيتريي)"
+      ]
+    };
+
+    function initDropdowns() {
+      const addWilaya = document.getElementById('add-wilaya');
+      const filterWilaya = document.getElementById('filter-wilaya');
+      wilayasList.forEach(w => {
+        addWilaya.innerHTML += `<option value="${w}">${w}</option>`;
+        filterWilaya.innerHTML += `<option value="${w}">${w}</option>`;
+      });
+
+      const addBrand = document.getElementById('add-brand');
+      const filterBrand = document.getElementById('filter-brand');
+      Object.keys(modelsData).sort().forEach(b => {
+        addBrand.innerHTML += `<option value="${b}">${b}</option>`;
+        filterBrand.innerHTML += `<option value="${b}">${b}</option>`;
+      });
+
+      const addEngine = document.getElementById('add-engine');
+      const filterEngine = document.getElementById('filter-engine');
+      enginesList.forEach(e => {
+        addEngine.innerHTML += `<option value="${e}">${e}</option>`;
+        filterEngine.innerHTML += `<option value="${e}">${e}</option>`;
+      });
+
+      const addCat = document.getElementById('add-category');
+      const filterCat = document.getElementById('filter-category');
+      Object.keys(categoriesData).forEach(c => {
+        addCat.innerHTML += `<option value="${c}">${c}</option>`;
+        filterCat.innerHTML += `<option value="${c}">${c}</option>`;
+      });
+
+      const yearSelect = document.getElementById('add-year');
+      for (let y = 2026; y >= 1980; y--) {
+        yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+      }
+    }
+
+    function updateModels(brandSelectId, modelSelectId) {
+      const brand = document.getElementById(brandSelectId).value;
+      const modelSelect = document.getElementById(modelSelectId);
+      modelSelect.innerHTML = '<option value="">اختر الموديل</option>';
+      if (modelsData[brand]) {
+        modelsData[brand].forEach(m => {
+          modelSelect.innerHTML += `<option value="${m}">${m}</option>`;
+        });
+      }
+    }
+
+    function updateParts(categorySelectId, partSelectId) {
+      const cat = document.getElementById(categorySelectId).value;
+      const partSelect = document.getElementById(partSelectId);
+      partSelect.innerHTML = '<option value="">اختر القطعة</option>';
+      if (categoriesData[cat]) {
+        categoriesData[cat].forEach(p => {
+          partSelect.innerHTML += `<option value="${p}">${p}</option>`;
+        });
+      }
+    }
+
+    function updateCommunes(wilayaSelectId, communeSelectId) {
+      const wilaya = document.getElementById(wilayaSelectId).value;
+      const communeSelect = document.getElementById(communeSelectId);
+      communeSelect.innerHTML = '<option value="">اختر البلدية</option>';
+      
+      if (communesData[wilaya]) {
+        communesData[wilaya].forEach(c => {
+          communeSelect.innerHTML += `<option value="${c}">${c}</option>`;
+        });
+      } else if (wilaya) {
+        const defaultCommune = wilaya.split(" - ")[1] || "المركز";
+        communeSelect.innerHTML += `<option value="${defaultCommune}">${defaultCommune} (المركز)</option>`;
+      }
+    }
+
+    let globalRequests = [];
+
+    // جلب البيانات مباشرةً من Firebase
+    requestsRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      globalRequests = [];
+      
+      if (data) {
+        Object.keys(data).forEach(key => {
+          globalRequests.unshift({ id: key, ...data[key] });
+        });
+      }
+      filterRequests();
+    });
+
+    function switchRoleTab(role) {
+      currentRoleTab = role;
+      document.getElementById('tabRoleAll').classList.toggle('active', role === 'all');
+      document.getElementById('tabRoleMy').classList.toggle('active', role === 'my');
+      filterRequests();
+    }
+
+    function renderRequests(items) {
+      const container = document.getElementById('requests-container');
+      const myPhone = localStorage.getItem('userPhone');
+
+      if (items.length === 0) {
+        const msg = (currentRoleTab === 'my') 
+          ? 'لم تقم بنشر أي طلبات بعد عبر هذا الجهاز.' 
+          : 'لا توجد طلبات مطابقة للبحث حالياً.';
+        container.innerHTML = `<p style="text-align:center; padding:30px; color:#64748b;">${msg}</p>`;
+        return;
+      }
+      
+      container.innerHTML = items.map(req => {
+        let offersHTML = '';
+        if (req.offers) {
+          const offersKeys = Object.keys(req.offers);
+          offersHTML = `
+            <div class="offers-container">
+              <strong style="color: #059669; font-size: 0.95rem;">
+                <i class="fa-solid fa-store"></i> عروض البائعين المتوفرة (${offersKeys.length}):
+              </strong>
+              ${offersKeys.map(k => {
+                const off = req.offers[k];
+                return `
+                  <div class="offer-card">
+                    <div class="offer-info">
+                      <i class="fa-solid fa-location-dot" style="color:#0284c7;"></i> <strong>${off.wilaya}:</strong> هاتف: ${off.phone}
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                      <a href="tel:${off.phone}" class="badge" style="background:#10b981; color:white; text-decoration:none;"><i class="fa-solid fa-phone"></i> اتصال</a>
+                      <a href="https://wa.me/213${off.phone.substring(1)}" target="_blank" class="badge" style="background:#25d366; color:white; text-decoration:none;"><i class="fa-brands fa-whatsapp"></i> واتساب</a>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        }
+
+        const isMyRequest = (currentRoleTab === 'my') || (myPhone && req.phone === myPhone);
+
+        return `
+          <div class="request-card">
+            <div class="request-header">
+              <div class="car-title">${req.brand} ${req.model} (${req.year})</div>
+              <div class="badge-group">
+                <span class="badge badge-status">${req.condition || 'غير محدد'}</span>
+                <span class="badge">${req.wilaya}</span>
+              </div>
+            </div>
+            <div class="info-grid">
+              <div class="info-item"><strong>الفئة:</strong> ${req.category || '-'}</div>
+              <div class="info-item"><strong>القطعة:</strong> ${req.part}</div>
+              <div class="info-item"><strong>المحرك:</strong> ${req.engine}</div>
+              <div class="info-item"><strong>البلدية:</strong> ${req.commune}</div>
+            </div>
+            
+            <div class="actions">
+              ${isMyRequest ? `
+                <button onclick="deleteRequest('${req.id}')" class="btn-action btn-delete">
+                  <i class="fa-solid fa-trash"></i> حذف الطلب
+                </button>
+              ` : `
+                <a href="tel:${req.phone}" target="_blank" class="btn-action btn-phone"><i class="fa-solid fa-phone"></i> اتصل بالمشتري</a>
+                <a href="https://wa.me/213${req.phone.substring(1)}" target="_blank" class="btn-action btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> واتساب</a>
+                <button onclick="toggleSellerForm('${req.id}')" class="btn-action btn-seller"><i class="fa-solid fa-check-circle"></i> متوفرة لدي؟ (للبائع)</button>
+              `}
+            </div>
+
+            <!-- نموذج إضافة عرض بائع -->
+            <div id="seller-form-${req.id}" class="seller-form hidden">
+              <h5 style="margin-bottom:8px; color:#0284c7;">إضافة عرض بائع للقطعة</h5>
+              <div class="form-row">
+                <div class="form-group" style="margin-bottom:8px;">
+                  <input type="tel" id="seller-phone-${req.id}" placeholder="رقم هاتف البائع (05/06/07)" pattern="0[567][0-9]{8}">
+                </div>
+                <div class="form-group" style="margin-bottom:8px;">
+                  <select id="seller-wilaya-${req.id}">
+                    <option value="">اختر ولاية البائع</option>
+                    ${wilayasList.map(w => `<option value="${w}">${w}</option>`).join('')}
+                  </select>
+                </div>
+              </div>
+              <button onclick="submitSellerOffer('${req.id}')" class="btn-submit" style="padding:10px; font-size:0.95rem; background:#0284c7; margin-top:5px;">تأكيد وتوفير القطعة</button>
+            </div>
+
+            ${offersHTML}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleSellerForm(reqId) {
+      const form = document.getElementById(`seller-form-${reqId}`);
+      form.classList.toggle('hidden');
+    }
+
+    function submitSellerOffer(reqId) {
+      const phoneInput = document.getElementById(`seller-phone-${reqId}`);
+      const wilayaSelect = document.getElementById(`seller-wilaya-${reqId}`);
+
+      const phone = phoneInput.value.trim();
+      const wilaya = wilayaSelect.value;
+
+      if (!phone || !wilaya) {
+        alert("يرجى إدخال رقم الهاتف واختيار الولاية لتأكيد العرض.");
+        return;
+      }
+
+      database.ref(`requests/${reqId}/offers`).push({
+        phone: phone,
+        wilaya: wilaya,
+        timestamp: Date.now()
+      }, (error) => {
+        if (error) {
+          alert("حدث خطأ أثناء حفظ العرض!");
+        } else {
+          alert("تم تسجيل عرضك كبائع بنجاح!");
+        }
+      });
+    }
+
+    function deleteRequest(reqId) {
+      if (confirm("هل أنت تأكد من إزالة هذا الطلب؟")) {
+        database.ref(`requests/${reqId}`).remove().then(() => {
+          alert("تم حذف الطلب بنجاح.");
+        }).catch((err) => {
+          alert("حدث خطأ أثناء إزالة الطلب.");
+        });
+      }
+    }
+
+    function filterRequests() {
+      const brand = document.getElementById('filter-brand').value;
+      const model = document.getElementById('filter-model').value;
+      const category = document.getElementById('filter-category').value;
+      const part = document.getElementById('filter-part').value;
+      const condition = document.getElementById('filter-condition').value;
+      const engine = document.getElementById('filter-engine').value;
+      const wilaya = document.getElementById('filter-wilaya').value;
+      const commune = document.getElementById('filter-commune').value;
+      const myPhone = localStorage.getItem('userPhone');
+
+      const filtered = globalRequests.filter(req => {
+        const matchesRole = (currentRoleTab === 'all') || (currentRoleTab === 'my' && req.phone === myPhone);
+
+        return matchesRole &&
+               (!brand || req.brand === brand) &&
+               (!model || req.model === model) &&
+               (!category || req.category === category) &&
+               (!part || req.part === part) &&
+               (!condition || req.condition === condition) &&
+               (!engine || req.engine === engine) &&
+               (!wilaya || req.wilaya === wilaya) &&
+               (!commune || req.commune === commune);
+      });
+
+      renderRequests(filtered);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-submit');
+      const phoneNum = document.getElementById('add-phone').value;
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "جاري النشر سحابياً...";
+
+      const newReq = {
+        brand: document.getElementById('add-brand').value,
+        model: document.getElementById('add-model').value,
+        year: document.getElementById('add-year').value,
+        engine: document.getElementById('add-engine').value,
+        category: document.getElementById('add-category').value,
+        part: document.getElementById('add-part').value,
+        condition: document.getElementById('add-condition').value,
+        wilaya: document.getElementById('add-wilaya').value,
+        commune: document.getElementById('add-commune').value,
+        phone: phoneNum,
+        timestamp: Date.now()
+      };
+
+      requestsRef.push(newReq, (error) => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "نشر الطلب سحابياً";
+
+        if (error) {
+          alert("تعذر النشر! يرجى التأكد من إعدادات قاعدة البيانات.");
+        } else {
+          // حفظ رقم هاتف المشتري محلياً
+          localStorage.setItem('userPhone', phoneNum);
+          alert("تم نشر طلبك بنجاح!");
+          document.getElementById('add-request-form').reset();
+          switchTab('search');
+        }
+      });
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-search').classList.add('hidden');
+      document.getElementById('tab-add').classList.add('hidden');
+
+      if (tab === 'search') {
+        document.querySelectorAll('.nav-btn')[0].classList.add('active');
+        document.getElementById('tab-search').classList.remove('hidden');
+      } else {
+        document.querySelectorAll('.nav-btn')[1].classList.add('active');
+        document.getElementById('tab-add').classList.remove('hidden');
+      }
+    }
+
+    initDropdowns();
+  </script>
+</body>
+</html>
